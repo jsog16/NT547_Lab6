@@ -1,0 +1,7 @@
+﻿index,check,impact,confidence,file,lines,description
+1,events-access,Low,Medium,AuditTarget.sol,"71,72,73,74; 73",StakingPool_0523.handOver(address) (AuditTarget.sol#71-74) should emit an event for:  	- owner = newOwner (AuditTarget.sol#73)
+2,timestamp,Low,Medium,AuditTarget.sol,"45,46,47,48,49,50; 46","StakingPool_0523.releaseTenth() (AuditTarget.sol#45-50) uses timestamp for comparisons 	Dangerous comparisons: 	- require(bool,string)(block.timestamp >= nextRelease,locked) (AuditTarget.sol#46)"
+3,low-level-calls,Informational,High,AuditTarget.sol,"45,46,47,48,49,50; 48","Low level call in StakingPool_0523.releaseTenth() (AuditTarget.sol#45-50): 	- (ok,None) = address(owner).call{value: address(this).balance / 10}() (AuditTarget.sol#48)"
+4,low-level-calls,Informational,High,AuditTarget.sol,"39,40,41,42,43; 41","Low level call in StakingPool_0523.drainTo(address) (AuditTarget.sol#39-43): 	- (ok,None) = to.call{value: address(this).balance}() (AuditTarget.sol#41)"
+5,low-level-calls,Informational,High,AuditTarget.sol,"34,35,36,37; 35","Low level call in StakingPool_0523.ownerWithdraw(uint256) (AuditTarget.sol#34-37): 	- (ok,None) = address(owner).call{value: amount}() (AuditTarget.sol#35)"
+6,naming-convention,Informational,High,AuditTarget.sol,"10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75",Contract StakingPool_0523 (AuditTarget.sol#10-75) is not in CapWords

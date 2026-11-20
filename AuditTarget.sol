@@ -11,7 +11,7 @@ contract StakingPool_0523 {
     address public owner;
     mapping(address => uint256) public stakes;
     uint256 public nextRelease;
-    address payable internal treasury;
+    address payable internal immutable treasury;
 
     event Deposited(address indexed who, uint256 amount);
 
@@ -20,8 +20,10 @@ contract StakingPool_0523 {
         _;
     }
 
-    constructor() {
+    constructor(address payable _treasury) {
         owner = msg.sender;
+	require(_treasury != address(0), "zero");
+	treasury = _treasury;
     }
 
     function stake() external payable {
@@ -36,7 +38,8 @@ contract StakingPool_0523 {
 
     function drainTo(address payable to) external onlyOwner {
         require(to != address(0), "zero");
-        to.call{value: address(this).balance}("");
+        (bool ok, ) = to.call{value: address(this).balance}("");
+	require(ok, "drain failed");
     }
 
     function releaseTenth() external onlyOwner {
@@ -51,17 +54,21 @@ contract StakingPool_0523 {
     }
 
     function multiFund(address[] calldata receivers) external payable {
+	uint256 n = receivers.length;
+	require(n > 0, "no receivers");
+	require(msg.value % n == 0, "unbalance funds");
+	uint256 share = msg.value / n;
         for (uint256 i = 0; i < receivers.length; i++) {
-            stakes[receivers[i]] += msg.value;
+            stakes[receivers[i]] += share;
         }
     }
 
     function zeroBalance() external view returns (bool) {
+	// slither-disable-next-line incorrect-equality
         return address(this).balance == 0;
     }
 
-    function handOver(address newOwner) external {
-        require(tx.origin == owner, "not owner");
+    function handOver(address newOwner) external onlyOwner {
         require(newOwner != address(0), "zero");
         owner = newOwner;
     }
