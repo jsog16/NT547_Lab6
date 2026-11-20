@@ -1,0 +1,46 @@
+COMMAND: slither AuditTarget.sol --config-file slither.config.json --fail-none --json evidence/before_configured/slither.json
+SLITHER_VERSION:
+0.11.6
+
+SOLC_VERSION:
+solc, the solidity compiler commandline interface
+Version: 0.8.24+commit.e11b9ed9.Linux.g++
+
+
+Detector: msg-value-loop
+StakingPool_0523.multiFund(address[]) (AuditTarget.sol#53-57) use msg.value in a loop: stakes[receivers[i]] += msg.value (AuditTarget.sol#55)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation/#msgvalue-inside-a-loop
+
+Detector: uninitialized-state
+StakingPool_0523.treasury (AuditTarget.sol#14) is never initialized. It is used in:
+	- StakingPool_0523.payTreasury() (AuditTarget.sol#49-51)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#uninitialized-state-variables
+
+Detector: incorrect-equality
+StakingPool_0523.zeroBalance() (AuditTarget.sol#59-61) uses a dangerous strict equality:
+	- address(this).balance == 0 (AuditTarget.sol#60)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#dangerous-strict-equalities
+
+Detector: tx-origin
+StakingPool_0523.handOver(address) (AuditTarget.sol#63-67) uses tx.origin for authorization: require(bool,string)(tx.origin == owner,not owner) (AuditTarget.sol#64)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#dangerous-usage-of-txorigin
+
+Detector: unchecked-lowlevel
+StakingPool_0523.drainTo(address) (AuditTarget.sol#37-40) ignores return value by to.call{value: address(this).balance}() (AuditTarget.sol#39)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unchecked-low-level-calls
+
+Detector: constable-states
+StakingPool_0523.treasury (AuditTarget.sol#14) should be constant 
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#state-variables-that-could-be-declared-constant
+AuditTarget.sol analyzed (2 contracts with 64 detectors), 6 result(s) found
+Multiple frameworks detected: solc, Solc-json. Using solc (highest priority). Use --compile-force-framework to override.
+'solc --version' running
+'solc AuditTarget.sol --combined-json abi,ast,bin,bin-runtime,srcmap,srcmap-runtime,userdoc,devdoc,hashes --allow-paths .,/home/heizn/Documents/ATTT2025.1/courses/nt547/lab6/Lab06_SinhVien' running
+Compilation warnings/errors on AuditTarget.sol:
+Warning: Return value of low-level calls not used.
+  --> AuditTarget.sol:39:9:
+   |
+39 |         to.call{value: address(this).balance}("");
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+

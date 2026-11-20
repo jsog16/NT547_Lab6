@@ -1,0 +1,7 @@
+﻿index,check,impact,confidence,file,lines,description
+1,msg-value-loop,High,Medium,AuditTarget.sol,"53,54,55,56,57; 55",StakingPool_0523.multiFund(address[]) (AuditTarget.sol#53-57) use msg.value in a loop: stakes[receivers[i]] += msg.value (AuditTarget.sol#55)
+2,uninitialized-state,High,High,AuditTarget.sol,"14; 49,50,51",StakingPool_0523.treasury (AuditTarget.sol#14) is never initialized. It is used in: 	- StakingPool_0523.payTreasury() (AuditTarget.sol#49-51)
+3,incorrect-equality,Medium,High,AuditTarget.sol,"59,60,61; 60",StakingPool_0523.zeroBalance() (AuditTarget.sol#59-61) uses a dangerous strict equality: 	- address(this).balance == 0 (AuditTarget.sol#60)
+4,tx-origin,Medium,Medium,AuditTarget.sol,"63,64,65,66,67; 64","StakingPool_0523.handOver(address) (AuditTarget.sol#63-67) uses tx.origin for authorization: require(bool,string)(tx.origin == owner,not owner) (AuditTarget.sol#64)"
+5,unchecked-lowlevel,Medium,Medium,AuditTarget.sol,"37,38,39,40; 39",StakingPool_0523.drainTo(address) (AuditTarget.sol#37-40) ignores return value by to.call{value: address(this).balance}() (AuditTarget.sol#39)
+6,constable-states,Optimization,High,AuditTarget.sol,14,StakingPool_0523.treasury (AuditTarget.sol#14) should be constant
